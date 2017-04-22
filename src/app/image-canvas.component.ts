@@ -17,14 +17,12 @@ export class ImageCanvasComponent implements AfterViewInit {
     @ViewChild('canvas') canvasRef: ElementRef;
     canvas: HTMLCanvasElement;
     context: CanvasRenderingContext2D;
-    host: HTMLElement;
 
-    constructor(private fileService: FileService, private hostRef: ElementRef) { }
+    constructor(private fileService: FileService) { }
 
     ngAfterViewInit() {
         this.canvas = this.canvasRef.nativeElement as HTMLCanvasElement;
         this.context = this.canvas.getContext('2d');
-        this.host = this.hostRef.nativeElement as HTMLElement;
         this.redraw();
     }
 
@@ -35,8 +33,8 @@ export class ImageCanvasComponent implements AfterViewInit {
 
     redraw() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.canvas.width = Math.floor(this.host.clientWidth);
-        this.canvas.height = Math.floor(this.host.clientHeight);
+        this.canvas.width = Math.floor(this.canvas.parentElement.clientWidth);
+        this.canvas.height = Math.floor(this.canvas.parentElement.clientHeight);
 
         let img = document.createElement('img') as HTMLImageElement;
         img.onload = () => {
