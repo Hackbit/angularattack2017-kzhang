@@ -11,6 +11,7 @@ export class ImageCanvasComponent implements AfterViewInit {
     @ViewChild('canvas') canvasRef: ElementRef;
     canvas: HTMLCanvasElement;
     context: CanvasRenderingContext2D;
+    imgCanvas: HTMLCanvasElement;
 
     constructor(private fileService: FileService) { }
 
@@ -30,23 +31,15 @@ export class ImageCanvasComponent implements AfterViewInit {
         this.canvas.width = Math.floor(this.canvas.parentElement.clientWidth);
         this.canvas.height = Math.floor(this.canvas.parentElement.clientHeight);
 
-        this.fileService.loadImage().then((img) => {
-            this.makeImageParts(img);
+        this.fileService.loadImage(this.canvas.width, this.canvas.height).then((imgCanvas) => {
+            this.imgCanvas = imgCanvas;
+            this.makeImageParts();
         });
     }
 
-    makeImageParts(img: HTMLImageElement) {
-        var maxW = Math.min(Math.floor(this.canvas.width * .9), img.width);
-        var maxH = Math.min(Math.floor(this.canvas.height * .9), img.height);
-
-        var scale = Math.min(maxW / img.width, maxH / img.height);
-
-        var drawWidth = Math.floor(img.width * scale);
-        var drawHeight = Math.floor(img.height * scale);
-
-        var offsetX = (this.canvas.width - drawWidth) >> 1;
-        var offsetY = (this.canvas.height - drawHeight) >> 1;
-
-        this.context.drawImage(img, 0, 0, img.width, img.height, offsetX, offsetY, drawWidth, drawHeight);
+    makeImageParts() {
+        let offsetX = (this.canvas.width - this.imgCanvas.width) >> 1;
+        let offsetY = (this.canvas.height - this.imgCanvas.height) >> 1;
+        this.context.drawImage(this.imgCanvas, 0, 0, this.imgCanvas.width, this.imgCanvas.height, offsetX, offsetY, this.imgCanvas.width, this.imgCanvas.height);
     }
 }
