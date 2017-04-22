@@ -1,0 +1,9 @@
+:host {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+}
+
+my-image-canvas {
+    flex-grow: 1;
+}
