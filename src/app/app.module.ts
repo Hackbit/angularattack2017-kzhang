@@ -5,6 +5,8 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header.component';
 import { ImageCanvasComponent } from './image-canvas.component';
 
+import { FileService } from './file.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -14,7 +16,7 @@ import { ImageCanvasComponent } from './image-canvas.component';
   imports: [
     BrowserModule
   ],
-  providers: [],
+  providers: [FileService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

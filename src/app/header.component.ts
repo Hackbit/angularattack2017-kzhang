@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
+import { FileService } from './file.service';
 
 @Component({
     selector: 'my-header',
@@ -9,12 +10,11 @@ export class HeaderComponent {
     title = 'Blast the image';
     subTitle = 'Roll over the image bellow to see the effect';
 
+    @Output() onSelectImage = new EventEmitter();
+
+    constructor(private fileService: FileService) { }
+
     readImage(fileInput: HTMLInputElement) {
-        let imageFile: File = fileInput.files[0];
-        let fileReader: FileReader = new FileReader();
-        fileReader.onload = function () {
-            console.log(fileReader.result);
-        };
-        fileReader.readAsDataURL(imageFile);
+        this.fileService.readImage(fileInput.files[0]).then(() => { this.onSelectImage.emit(); });
     }
 }
