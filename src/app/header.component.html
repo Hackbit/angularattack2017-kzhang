@@ -3,5 +3,5 @@
 <label>
     <img src="assets/switch.png" alt="Switch Image">
     Switch Image
-    <input type="file" accept="image/gif,image/jpg,image/jpeg,image/png,image/bmp">
+    <input type="file" #fileInput accept="image/gif,image/jpg,image/jpeg,image/png,image/bmp" (change)="readImage(fileInput)">
 </label>
