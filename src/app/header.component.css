@@ -1,0 +1,10 @@
+:host {
+    padding: 0 1em;
+    margin-bottom: 1em;
+    box-shadow: 0 2px 8px;
+    color: #444;
+}
+
+h4 {
+    color: #888;
+}
