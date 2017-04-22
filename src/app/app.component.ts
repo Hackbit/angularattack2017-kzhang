@@ -2,9 +2,12 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
+  template: `
+    <my-header></my-header>
+    <my-image-canvas></my-image-canvas>
+    <my-switch-image-btn></my-switch-image-btn>
+  `,
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'kzhang test!!!!';
 }
