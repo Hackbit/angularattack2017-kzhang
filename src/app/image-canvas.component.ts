@@ -25,8 +25,11 @@ export class ImageCanvasComponent implements AfterViewInit {
     }
 
     redraw() {
-        this.canvas.width = this.host.clientWidth;
-        this.canvas.height = this.host.clientHeight;
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.canvas.width = Math.floor(this.host.clientWidth);
+        this.canvas.style.width = this.canvas.width + 'px';
+        this.canvas.height = Math.floor(this.host.clientHeight);
+        this.canvas.style.height = this.canvas.height + 'px';
 
         this.imageData = this.fileService.imageData;
         let img = document.createElement('img') as HTMLImageElement;
