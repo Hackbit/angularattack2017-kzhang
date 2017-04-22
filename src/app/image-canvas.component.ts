@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit, HostListener } from '@angular/core';
 
 import { FileService } from './file.service';
 
@@ -6,14 +6,18 @@ import { FileService } from './file.service';
     selector: 'my-image-canvas',
     template: `
         <canvas #canvas></canvas>
-    `
+    `,
+    styles: [`
+        canvas {
+            display: block;
+        }
+    `]
 })
 export class ImageCanvasComponent implements AfterViewInit {
     @ViewChild('canvas') canvasRef: ElementRef;
     canvas: HTMLCanvasElement;
     context: CanvasRenderingContext2D;
     host: HTMLElement;
-    imageData: string;
 
     constructor(private fileService: FileService, private hostRef: ElementRef) { }
 
@@ -24,18 +28,20 @@ export class ImageCanvasComponent implements AfterViewInit {
         this.redraw();
     }
 
+    @HostListener('window:resize', ['$event'])
+    onResize(event) {
+        this.redraw();
+    }
+
     redraw() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.canvas.width = Math.floor(this.host.clientWidth);
-        this.canvas.style.width = this.canvas.width + 'px';
         this.canvas.height = Math.floor(this.host.clientHeight);
-        this.canvas.style.height = this.canvas.height + 'px';
 
-        this.imageData = this.fileService.imageData;
         let img = document.createElement('img') as HTMLImageElement;
         img.onload = () => {
             this.context.drawImage(img, 0, 0);
         };
-        img.src = this.imageData;
+        img.src = this.fileService.imageData;
     }
 }
