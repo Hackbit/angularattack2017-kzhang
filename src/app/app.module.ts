@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header.component';
-import { ImageCanvasComponent } from './image-canvas.component';
+import { ImgCanvasComponent } from './img-canvas.component';
 
 import { FileService } from './file.service';
 
@@ -11,7 +11,7 @@ import { FileService } from './file.service';
   declarations: [
     AppComponent,
     HeaderComponent,
-    ImageCanvasComponent
+    ImgCanvasComponent
   ],
   imports: [
     BrowserModule

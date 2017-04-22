@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { ImageCanvasComponent } from './image-canvas.component';
+import { ImgCanvasComponent } from './img-canvas.component';
 
 @Component({
   selector: 'app-root',
@@ -7,7 +7,7 @@ import { ImageCanvasComponent } from './image-canvas.component';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  @ViewChild(ImageCanvasComponent) canvas: ImageCanvasComponent;
+  @ViewChild(ImgCanvasComponent) canvas: ImgCanvasComponent;
 
   onSelectImage() {
     this.canvas.redraw();

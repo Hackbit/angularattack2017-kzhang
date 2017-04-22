@@ -22,10 +22,10 @@ export class FileService {
             };
             img.src = this.imageData;
         }).then((img: HTMLImageElement) => {
-            var maxW = Math.min(Math.floor(containerWidth * .9), img.width);
-            var maxH = Math.min(Math.floor(containerHeight * .9), img.height);
+            let maxW = Math.min(Math.floor(containerWidth * .9), img.width);
+            let maxH = Math.min(Math.floor(containerHeight * .9), img.height);
 
-            var scale = Math.min(maxW / img.width, maxH / img.height);
+            let scale = Math.min(maxW / img.width, maxH / img.height);
 
             let drawWidth = Math.floor(img.width * scale);
             let drawHeight = Math.floor(img.height * scale);
