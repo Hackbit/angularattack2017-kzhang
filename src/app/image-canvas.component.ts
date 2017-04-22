@@ -38,8 +38,23 @@ export class ImageCanvasComponent implements AfterViewInit {
 
         let img = document.createElement('img') as HTMLImageElement;
         img.onload = () => {
-            this.context.drawImage(img, 0, 0);
+            this.makeImageParts(img);
         };
         img.src = this.fileService.imageData;
+    }
+
+    makeImageParts(img: HTMLImageElement) {
+        var maxW = Math.min(Math.floor(this.canvas.width * .9), img.width);
+        var maxH = Math.min(Math.floor(this.canvas.height * .9), img.height);
+
+        var scale = Math.min(maxW / img.width, maxH / img.height);
+
+        var drawWidth = Math.floor(img.width * scale);
+        var drawHeight = Math.floor(img.height * scale);
+
+        var offsetX = (this.canvas.width - drawWidth) >> 1;
+        var offsetY = (this.canvas.height - drawHeight) >> 1;
+
+        this.context.drawImage(img, 0, 0, img.width, img.height, offsetX, offsetY, drawWidth, drawHeight);
     }
 }
