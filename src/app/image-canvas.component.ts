@@ -4,14 +4,8 @@ import { FileService } from './file.service';
 
 @Component({
     selector: 'my-image-canvas',
-    template: `
-        <canvas #canvas></canvas>
-    `,
-    styles: [`
-        canvas {
-            display: block;
-        }
-    `]
+    templateUrl: './image-canvas.component.html',
+    styleUrls: ['./image-canvas.component.css']
 })
 export class ImageCanvasComponent implements AfterViewInit {
     @ViewChild('canvas') canvasRef: ElementRef;
@@ -36,11 +30,9 @@ export class ImageCanvasComponent implements AfterViewInit {
         this.canvas.width = Math.floor(this.canvas.parentElement.clientWidth);
         this.canvas.height = Math.floor(this.canvas.parentElement.clientHeight);
 
-        let img = document.createElement('img') as HTMLImageElement;
-        img.onload = () => {
+        this.fileService.loadImage().then((img) => {
             this.makeImageParts(img);
-        };
-        img.src = this.fileService.imageData;
+        });
     }
 
     makeImageParts(img: HTMLImageElement) {

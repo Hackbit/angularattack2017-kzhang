@@ -15,6 +15,6 @@ export class HeaderComponent {
     constructor(private fileService: FileService) { }
 
     readImage(fileInput: HTMLInputElement) {
-        this.fileService.readImage(fileInput.files[0]).then(() => { this.onSelectImage.emit(); });
+        this.fileService.readFile(fileInput.files[0]).then(() => { this.onSelectImage.emit(); });
     }
 }
