@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class FileService {
-    imageData: string;
+    imageData: string = 'assets/default.png';
 
     readImage(imageFile: File): Promise<any> {
         return new Promise(function (resolve, reject) {
