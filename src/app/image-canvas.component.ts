@@ -1,11 +1,19 @@
 import { Component } from '@angular/core';
 
+import { FileService } from './file.service';
+
 @Component({
     selector: 'my-image-canvas',
     template: `
-        <h1>Image Canvas View</h1>
+        <img src="{{imageData}}">
     `
 })
 export class ImageCanvasComponent {
+    imageData: string = '';
 
+    constructor(private fileService: FileService) { }
+
+    redraw() {
+        this.imageData = this.fileService.imageData;
+    }
 }
