@@ -14,6 +14,8 @@ export class ImgCanvasComponent implements AfterViewInit {
     @ViewChild('canvas') canvasRef: ElementRef;
     canvas: HTMLCanvasElement;
     context: CanvasRenderingContext2D;
+    shadowCanvas: HTMLCanvasElement;
+    shadowContext: CanvasRenderingContext2D;
     imgCanvas: HTMLCanvasElement;
     imgParts: ImgPart[];
 
@@ -22,6 +24,8 @@ export class ImgCanvasComponent implements AfterViewInit {
     ngAfterViewInit() {
         this.canvas = this.canvasRef.nativeElement as HTMLCanvasElement;
         this.context = this.canvas.getContext('2d');
+        this.shadowCanvas = document.createElement('canvas');
+        this.shadowContext = this.shadowCanvas.getContext('2d');
         this.redraw();
     }
 
@@ -32,8 +36,8 @@ export class ImgCanvasComponent implements AfterViewInit {
 
     redraw() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.canvas.width = Math.floor(this.canvas.parentElement.clientWidth);
-        this.canvas.height = Math.floor(this.canvas.parentElement.clientHeight);
+        this.shadowCanvas.width = this.canvas.width = Math.floor(this.canvas.parentElement.clientWidth);
+        this.shadowCanvas.height = this.canvas.height = Math.floor(this.canvas.parentElement.clientHeight);
 
         this.fileService.loadImage(this.canvas.width, this.canvas.height).then((imgCanvas) => {
             this.imgCanvas = imgCanvas;
@@ -45,8 +49,11 @@ export class ImgCanvasComponent implements AfterViewInit {
     }
 
     draw() {
+        this.shadowContext.clearRect(0, 0, this.shadowCanvas.width, this.shadowCanvas.height)
         for (let i = 0; i < this.imgParts.length; i++) {
-
+            let part = this.imgParts[i];
+            this.shadowContext.drawImage(this.imgCanvas, part.offsetX, part.offsetY, part.width, part.height, part.canvasOffsetX, part.canvasOffsetY, part.width, part.height);
         }
+        this.context.drawImage(this.shadowCanvas, 0, 0);
     }
 }
