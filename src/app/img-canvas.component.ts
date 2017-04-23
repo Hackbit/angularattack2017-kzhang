@@ -96,7 +96,7 @@ export class ImgCanvasComponent implements AfterViewInit {
     @HostListener('window:mousemove', ['$event'])
     onMouseMove(event) {
         let rect = this.canvas.getBoundingClientRect();
-        this.imgPartService.setMousePosition(event.offsetX - rect.left, event.offsetY - rect.top);
+        this.imgPartService.setMousePosition(event.clientX - rect.left, event.clientY - rect.top);
     }
 
     resetCanvasSize() {
