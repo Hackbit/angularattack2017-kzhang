@@ -8,6 +8,9 @@ export class ImgPart {
     canvasOffsetX: number;
     canvasOffsetY: number;
 
+    vx: number;
+    vy: number;
+
     // fadeout
     life?: number;
     // fadein
