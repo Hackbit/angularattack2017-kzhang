@@ -6,6 +6,14 @@ const PART_WIDTH = 2;
 const PART_HEIGHT = 2;
 @Injectable()
 export class ImgPartService {
+    mouseX: number;
+    mouseY: number;
+
+    setMousePosition(x: number, y: number) {
+        this.mouseX = Math.round(x);
+        this.mouseY = Math.round(y);
+    }
+
     makeParts(w: number, h: number, offsetX: number, offsetY: number): ImgPart[] {
         let parts: ImgPart[] = [];
         let columns = Math.ceil(w / PART_WIDTH);

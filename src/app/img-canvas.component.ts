@@ -93,6 +93,12 @@ export class ImgCanvasComponent implements AfterViewInit {
         this.resizeSubject.next('resize');
     }
 
+    @HostListener('window:mousemove', ['$event'])
+    onMouseMove(event) {
+        let rect = this.canvas.getBoundingClientRect();
+        this.imgPartService.setMousePosition(event.offsetX - rect.left, event.offsetY - rect.top);
+    }
+
     resetCanvasSize() {
         this.shadowCanvas.width = this.canvas.width = Math.floor(this.canvas.parentElement.clientWidth);
         this.shadowCanvas.height = this.canvas.height = Math.floor(this.canvas.parentElement.clientHeight);
