@@ -35,9 +35,17 @@ export class ImgCanvasComponent implements AfterViewInit {
     constructor(private fileService: FileService, private imgPartService: ImgPartService) { }
 
     imgChangeHandler() {
+        this.fadeOutOldImg();
+    }
+
+    fadeInNewImg() {
         this.loadImg().then(() => {
             this.imgParts = this.imgPartService.fadeInParts(this.makeParts());
         });
+    }
+
+    fadeOutOldImg() {
+        this.imgParts = this.imgPartService.fadeOutParts(this.imgParts);
     }
 
     ngAfterViewInit() {
@@ -47,12 +55,12 @@ export class ImgCanvasComponent implements AfterViewInit {
         this.shadowContext = this.shadowCanvas.getContext('2d');
 
         this.resetCanvasSize();
-        this.imgChangeHandler();
+        this.fadeInNewImg();
         this.startAnimation();
 
         this.resizeSubject.debounceTime(300).subscribe(() => {
             this.resetCanvasSize();
-            this.loadImg().then(() => { this.imgParts = this.makeParts(); });
+            this.fadeInNewImg();
         });
     }
 
@@ -105,10 +113,16 @@ export class ImgCanvasComponent implements AfterViewInit {
     draw() {
         this.shadowContext.fillStyle = '#fff';
         this.shadowContext.fillRect(0, 0, this.shadowCanvas.width, this.shadowCanvas.height);
+        let allFadeOut = true;
         for (let i = 0; i < this.imgParts.length; i++) {
             let part = this.imgParts[i];
-            if (this.imgPartService.isPartVisible(part))
+            if (this.imgPartService.isPartVisible(part)) {
+                allFadeOut = false;
                 this.shadowContext.drawImage(this.imgCanvas, part.offsetX, part.offsetY, part.width, part.height, part.canvasOffsetX, part.canvasOffsetY, part.width, part.height);
+            }
+        }
+        if (allFadeOut) {
+            this.fadeInNewImg();
         }
         this.context.drawImage(this.shadowCanvas, 0, 0);
     }

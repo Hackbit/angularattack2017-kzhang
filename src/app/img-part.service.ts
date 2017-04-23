@@ -28,6 +28,13 @@ export class ImgPartService {
         return parts;
     }
 
+    fadeOutParts(parts: ImgPart[]): ImgPart[] {
+        for (let i = 0; i < parts.length; i++) {
+            parts[i].life = Math.floor(Math.random() * 12);
+        }
+        return parts;
+    }
+
     fadeInParts(parts: ImgPart[]): ImgPart[] {
         for (let i = 0; i < parts.length; i++) {
             parts[i].birth = Math.floor(Math.random() * 12);
@@ -53,10 +60,19 @@ export class ImgPartService {
                 animated = true;
             }
         }
+        // fadeout
+        if (part.life != undefined && part.life > 0) {
+            part.life--;
+            if (part.life <= 0) { // die
+                animated = true;
+            }
+        }
         return animated;
     }
 
     isPartVisible(part: ImgPart): boolean {
-        return !(part.birth != undefined && part.birth > 0);
+        let isBorn = part.birth == undefined || part.birth <= 0;
+        let isDead = part.life != undefined && part.life <= 0;
+        return isBorn && !isDead;
     }
 }
