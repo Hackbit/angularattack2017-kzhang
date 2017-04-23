@@ -21,7 +21,9 @@ export class ImgPartService {
                     width: PART_WIDTH,
                     height: PART_HEIGHT,
                     canvasOffsetX: x + offsetX,
-                    canvasOffsetY: y + offsetY
+                    canvasOffsetY: y + offsetY,
+                    canvasOriginOffsetX: x + offsetX,
+                    canvasOriginOffsetY: y + offsetY
                 });
             }
         }
@@ -70,9 +72,14 @@ export class ImgPartService {
         return animated;
     }
 
-    isPartVisible(part: ImgPart): boolean {
+    isPartAlive(part: ImgPart): boolean {
         let isBorn = part.birth == undefined || part.birth <= 0;
         let isDead = part.life != undefined && part.life <= 0;
         return isBorn && !isDead;
+    }
+
+    isInsideCanvas(part: ImgPart, canvas: HTMLCanvasElement): boolean {
+        return part.canvasOffsetX > 0 && part.canvasOffsetX < canvas.width
+            && part.canvasOffsetY > 0 && part.canvasOffsetY < canvas.height;
     }
 }

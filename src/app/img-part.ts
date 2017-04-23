@@ -3,6 +3,8 @@ export class ImgPart {
     offsetY: number;
     width: number;
     height: number;
+    canvasOriginOffsetX: number;
+    canvasOriginOffsetY: number;
     canvasOffsetX: number;
     canvasOffsetY: number;
 

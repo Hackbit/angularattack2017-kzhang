@@ -113,15 +113,17 @@ export class ImgCanvasComponent implements AfterViewInit {
     draw() {
         this.shadowContext.fillStyle = '#fff';
         this.shadowContext.fillRect(0, 0, this.shadowCanvas.width, this.shadowCanvas.height);
-        let allFadeOut = true;
+        let partsAllDead = true;
         for (let i = 0; i < this.imgParts.length; i++) {
             let part = this.imgParts[i];
-            if (this.imgPartService.isPartVisible(part)) {
-                allFadeOut = false;
-                this.shadowContext.drawImage(this.imgCanvas, part.offsetX, part.offsetY, part.width, part.height, part.canvasOffsetX, part.canvasOffsetY, part.width, part.height);
+            if (this.imgPartService.isPartAlive(part)) {
+                partsAllDead = false;
+                if (this.imgPartService.isInsideCanvas(part, this.canvas)) {
+                    this.shadowContext.drawImage(this.imgCanvas, part.offsetX, part.offsetY, part.width, part.height, part.canvasOffsetX, part.canvasOffsetY, part.width, part.height);
+                }
             }
         }
-        if (allFadeOut) {
+        if (partsAllDead) {
             this.fadeInNewImg();
         }
         this.context.drawImage(this.shadowCanvas, 0, 0);
