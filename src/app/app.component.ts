@@ -10,6 +10,6 @@ export class AppComponent {
   @ViewChild(ImgCanvasComponent) canvas: ImgCanvasComponent;
 
   onSelectImage() {
-    this.canvas.redraw();
+    this.canvas.imgChangeHandler();
   }
 }
