@@ -5,7 +5,7 @@ import { ImgPart } from './img-part';
 const PART_WIDTH = 10;
 const PART_HEIGHT = 10;
 const FADEIN_DURATION = 12;
-const FADEOUT_DURATION = 12;
+const FADEOUT_DURATION = 36;
 
 const MOUSE_EFFECT_RADIUS = 100;
 const BACK_TO_ORIGIN_FRACTION = .9;
@@ -30,15 +30,17 @@ export class ImgPartService {
             let y = i * PART_HEIGHT;
             for (let j = 0; j < columns; j++) {
                 let x = j * PART_WIDTH;
+                let canvasX = x + offsetX;
+                let canvasY = y + offsetY;
                 parts.push({
                     offsetX: x,
                     offsetY: y,
                     width: PART_WIDTH,
                     height: PART_HEIGHT,
-                    canvasOffsetX: x + offsetX,
-                    canvasOffsetY: y + offsetY,
-                    canvasOriginOffsetX: x + offsetX,
-                    canvasOriginOffsetY: y + offsetY,
+                    canvasOffsetX: canvasX,
+                    canvasOffsetY: canvasY,
+                    canvasOriginOffsetX: canvasX,
+                    canvasOriginOffsetY: canvasY,
                     vx: 0,
                     vy: 0
                 });
@@ -49,14 +51,22 @@ export class ImgPartService {
 
     fadeOutParts(parts: ImgPart[]): ImgPart[] {
         for (let i = 0; i < parts.length; i++) {
-            parts[i].life = Math.floor(Math.random() * FADEOUT_DURATION);
+            let part = parts[i];
+            part.life = Math.floor(Math.random() * FADEOUT_DURATION);
+            part.vx = Math.floor((Math.random() - .5) * 50);
+            part.vy = Math.floor((Math.random() - .5) * 30);
+            part.canvasOriginOffsetX = part.canvasOriginOffsetX + part.vx / 4 * FADEOUT_DURATION;
+            part.canvasOriginOffsetY = 1000;
         }
         return parts;
     }
 
     fadeInParts(parts: ImgPart[]): ImgPart[] {
         for (let i = 0; i < parts.length; i++) {
-            parts[i].birth = Math.floor(Math.random() * FADEIN_DURATION);
+            let part = parts[i];
+            part.birth = Math.floor(Math.random() * FADEIN_DURATION);
+            part.canvasOffsetY = 1000;
+            part.vx = Math.floor((Math.random() - .5) * 100);
         }
         return parts;
     }
