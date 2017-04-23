@@ -19,13 +19,25 @@ export class ImgCanvasComponent implements AfterViewInit {
     shadowCanvas: HTMLCanvasElement;
     shadowContext: CanvasRenderingContext2D;
     imgCanvas: HTMLCanvasElement;
-    imgParts: ImgPart[] = [];
+    _imgParts: ImgPart[];
+
+    set imgParts(value: ImgPart[]) {
+        this._imgParts = value;
+        this._isDirty = true;
+    }
+
+    get imgParts(): ImgPart[] {
+        return this._imgParts;
+    }
+
     resizeSubject = new Subject<string>()
 
     constructor(private fileService: FileService, private imgPartService: ImgPartService) { }
 
     imgChangeHandler() {
-        this.loadImg();
+        this.loadImg().then(() => {
+            this.imgParts = this.imgPartService.fadeInParts(this.makeParts());
+        });
     }
 
     ngAfterViewInit() {
@@ -40,7 +52,7 @@ export class ImgCanvasComponent implements AfterViewInit {
 
         this.resizeSubject.debounceTime(300).subscribe(() => {
             this.resetCanvasSize();
-            this.loadImg();
+            this.loadImg().then(() => { this.imgParts = this.makeParts(); });
         });
     }
 
@@ -53,8 +65,19 @@ export class ImgCanvasComponent implements AfterViewInit {
         });
     }
 
+    private _isDirty = false;
+
     isDirty() {
-        return true;
+        if (!this.imgParts) return false;
+        let result = false;
+        if (this._isDirty) {
+            this._isDirty = false;
+            result = true;
+        }
+        if (this.imgPartService.animateParts(this.imgParts)) {
+            result = true;
+        }
+        return result;
     }
 
     @HostListener('window:resize', ['$event'])
@@ -67,12 +90,15 @@ export class ImgCanvasComponent implements AfterViewInit {
         this.shadowCanvas.height = this.canvas.height = Math.floor(this.canvas.parentElement.clientHeight);
     }
 
+    makeParts() {
+        let offsetX = (this.canvas.width - this.imgCanvas.width) >> 1;
+        let offsetY = (this.canvas.height - this.imgCanvas.height) >> 1;
+        return this.imgPartService.makeParts(this.imgCanvas.width, this.imgCanvas.height, offsetX, offsetY);
+    }
+
     loadImg(): Promise<any> {
         return this.fileService.loadImage(this.canvas.width, this.canvas.height).then((imgCanvas) => {
             this.imgCanvas = imgCanvas;
-            let offsetX = (this.canvas.width - this.imgCanvas.width) >> 1;
-            let offsetY = (this.canvas.height - this.imgCanvas.height) >> 1;
-            this.imgParts = this.imgPartService.makeParts(this.imgCanvas.width, this.imgCanvas.height, offsetX, offsetY);
         });
     }
 
@@ -81,7 +107,8 @@ export class ImgCanvasComponent implements AfterViewInit {
         this.shadowContext.fillRect(0, 0, this.shadowCanvas.width, this.shadowCanvas.height);
         for (let i = 0; i < this.imgParts.length; i++) {
             let part = this.imgParts[i];
-            this.shadowContext.drawImage(this.imgCanvas, part.offsetX, part.offsetY, part.width, part.height, part.canvasOffsetX, part.canvasOffsetY, part.width, part.height);
+            if (this.imgPartService.isPartVisible(part))
+                this.shadowContext.drawImage(this.imgCanvas, part.offsetX, part.offsetY, part.width, part.height, part.canvasOffsetX, part.canvasOffsetY, part.width, part.height);
         }
         this.context.drawImage(this.shadowCanvas, 0, 0);
     }

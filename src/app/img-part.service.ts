@@ -27,4 +27,36 @@ export class ImgPartService {
         }
         return parts;
     }
+
+    fadeInParts(parts: ImgPart[]): ImgPart[] {
+        for (let i = 0; i < parts.length; i++) {
+            parts[i].birth = Math.floor(Math.random() * 12);
+        }
+        return parts;
+    }
+
+    animateParts(parts: ImgPart[]): boolean {
+        let changed = false;
+        for (let i = 0; i < parts.length; i++) {
+            if (this.animatePart(parts[i]))
+                changed = true;
+        }
+        return changed;
+    }
+
+    animatePart(part: ImgPart): boolean {
+        let animated = false;
+        // fadein
+        if (part.birth != undefined && part.birth > 0) {
+            part.birth--;
+            if (part.birth <= 0) { // born
+                animated = true;
+            }
+        }
+        return animated;
+    }
+
+    isPartVisible(part: ImgPart): boolean {
+        return !(part.birth != undefined && part.birth > 0);
+    }
 }

@@ -5,4 +5,9 @@ export class ImgPart {
     height: number;
     canvasOffsetX: number;
     canvasOffsetY: number;
+
+    // fadeout
+    life?: number;
+    // fadein
+    birth?: number;
 }
